@@ -53,3 +53,4 @@
 
 (draw-grid)
 (send main-window show #t)
+;;Va konstiga tabbar
