@@ -52,7 +52,7 @@
        
   (super-new)))
   
-  (define top-brick-coord -400)
+  (define top-brick-coord -200)
   
   ;;----------Brick objects----------
   (define brick1
@@ -61,7 +61,7 @@
 		[y-pos top-brick-coord]
 		[height 100]
 		[width 100]
-		[color "black"]))
+		[color "red"]))
 		
 (define brick2
 	(new brick%
@@ -69,7 +69,7 @@
 		[y-pos (+ 100 top-brick-coord)]
 		[height 100]
 		[width 100]
-		[color "black"]))
+		[color "red"]))
 		
 (define brick3
 	(new brick%
@@ -77,7 +77,7 @@
 		[y-pos (+ 200 top-brick-coord)]
 		[height 100]
 		[width 100]
-		[color "black"]))
+		[color "red"]))
 		
 (define brick4
 	(new brick%
@@ -85,7 +85,7 @@
 		[y-pos (+ 400 top-brick-coord)]
 		[height 100]
 		[width 100]
-		[color "black"]))
+		[color "red"]))
 		
 (define brick5
 	(new brick%
@@ -93,8 +93,25 @@
 		[y-pos (+ 300 top-brick-coord)]
 		[height 100]
 		[width 100]
-		[color "black"]))
+		[color "red"]))
+
+(define brick6
+	(new brick%
+		[x-pos 300]
+		[y-pos (+ 600 top-brick-coord)]
+		[height 100]
+		[width 100]
+		[color "red"]))
+
+(define brick7
+	(new brick%
+		[x-pos 100]
+		[y-pos (+ 500 top-brick-coord)]
+		[height 100]
+		[width 100]
+		[color "red"]))
 
 ;;List with all the brick objects
 (define brick-lst
-	(list brick1 brick2 brick3 brick4 brick5))
+	(list brick1 brick2 brick3 brick4 brick5 brick6 brick7))
+
