@@ -1,5 +1,6 @@
 #lang racket/gui
 (require "brick.rkt")
+(require "game-window-class.rkt")
 
 ;;----------main gameboard----------
 
@@ -37,18 +38,41 @@
     (if (null? (cdr lst))
         (begin
           (send (car lst) offset-x-y-pos 0 100)
+          (send (car lst) set-current)
           (send dc set-brush (make-object brush% (send (car lst) get-color) 'solid))
           (send dc draw-rectangle (send (car lst) get-x-pos) (send (car lst) get-y-pos)
                 (send (car lst) get-width) (send (car lst) get-height)))
         (begin
           (send (car lst) offset-x-y-pos 0 100)
+          (send (car lst) set-current)
           (send dc set-brush (make-object brush% (send (car lst) get-color) 'solid))
           (send dc draw-rectangle (send (car lst) get-x-pos) (send (car lst) get-y-pos)
                 (send (car lst) get-width) (send (car lst) get-height))
           (change-brick-pos (cdr lst)))))
   (begin
+    ;;(send dc set-background "red")
     (send dc draw-bitmap grid-bitmap 0 0)
     (change-brick-pos brick-lst)))
+
+;;Returns the brick at the bottom of the screen
+(define (get-current lst)
+  (cond
+    ([send (car lst) is-current?]
+      (car lst))
+    (else (get-current (cdr lst)))))
+
+;;Cancels gameplay
+(define (wrong-key)
+  (void))
+
+;;Refreshes the canvas if the key for the bottom brick is pressed. otherwise cancels gameplay
+(define (handle-key-event key-event)
+  (let ((key-code (send key-event get-key-code)))
+    (cond
+      ([eq? key-code (send (get-current brick-lst) get-key-code)] ;;-48??? (ASCII)
+        (send game-canvas refresh))
+      (else
+        (wrong-key)))))
 
 ;;Parent window for game-mode
 (define main-game-window
@@ -57,17 +81,10 @@
        [height 799]
        [label "Inte nudda lava"]))
        
-;;(define top-panel
-;;  (new horizontal-panel%
-;;    [parent main-game-window]))
-
-(define bottom-panel
-  (new horizontal-panel%
-       [parent main-game-window]))
-
 (define game-canvas
-  (new canvas%
-       [parent bottom-panel]
-       [paint-callback render-game]))
+  (new game-canvas%
+    [parent main-game-window]
+    [paint-callback render-game]
+    [keyboard-handler handle-key-event]))
 
 (send main-game-window show #t)
