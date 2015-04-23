@@ -63,8 +63,8 @@
       (define/public (is-current?)
       	current?)
       	
-      (define/public (set-key-code)
-      	(set! key-code (+ (/ x-pos 100) 1)))
+      (define/public (set-key-code!)
+      	(set! key-code (+ (/ x-pos 100) 49)))
       	
       (define/public (set-current)
       	(if (= y-pos (+ 600 top-brick-coord))
@@ -82,8 +82,8 @@
 		[y-pos top-brick-coord]
 		[height 100]
 		[width 100]
-		[color "red"]
-		[key-code 1]
+		[color "black"]
+		[key-code 49]
 		[current? #f]))
 		
 (define brick2
@@ -92,8 +92,8 @@
 		[y-pos (+ 100 top-brick-coord)]
 		[height 100]
 		[width 100]
-		[color "red"]
-		[key-code 2]
+		[color "black"]
+		[key-code 50]
 		[current? #f]))
 		
 (define brick3
@@ -102,8 +102,8 @@
 		[y-pos (+ 200 top-brick-coord)]
 		[height 100]
 		[width 100]
-		[color "red"]
-		[key-code 3]
+		[color "black"]
+		[key-code 51]
 		[current? #f]))
 		
 (define brick4
@@ -112,8 +112,8 @@
 		[y-pos (+ 400 top-brick-coord)]
 		[height 100]
 		[width 100]
-		[color "red"]
-		[key-code 4]
+		[color "black"]
+		[key-code 52]
 		[current? #f]))
 		
 (define brick5
@@ -122,8 +122,8 @@
 		[y-pos (+ 300 top-brick-coord)]
 		[height 100]
 		[width 100]
-		[color "red"]
-		[key-code 5]
+		[color "black"]
+		[key-code 53]
 		[current? #f]))
 
 (define brick6
@@ -132,8 +132,8 @@
 		[y-pos (+ 600 top-brick-coord)]
 		[height 100]
 		[width 100]
-		[color "red"]
-		[key-code 4]
+		[color "black"]
+		[key-code 52]
 		[current? #t]))
 
 (define brick7
@@ -142,8 +142,8 @@
 		[y-pos (+ 500 top-brick-coord)]
 		[height 100]
 		[width 100]
-		[color "red"]
-		[key-code 2]
+		[color "black"]
+		[key-code 49]
 		[current? #f]))
 
 ;;List with all the brick objects
