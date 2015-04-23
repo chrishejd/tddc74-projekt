@@ -1,0 +1,35 @@
+#lang racket/gui
+
+(provide mk-grid-bitmap)
+(provide grid)
+(provide grid-bitmap)
+
+(define grid-bitmap (make-bitmap 800 1600))
+
+(define (mk-grid-bitmap target)
+  (let ((dc (new bitmap-dc% [bitmap target])))
+    (begin
+      (send dc set-brush (make-object brush% "yellow" 'solid))
+      (send dc draw-rectangle 0 0 500 700)
+      (send dc draw-line 100 0 100 750)
+      (send dc draw-line 200 0 200 750)
+      (send dc draw-line 300 0 300 750)
+      (send dc draw-line 400 0 400 750)
+      (send dc draw-line 500 0 500 750)
+      ;;Horizontal lines
+      (send dc draw-line 0 0 500 0)
+      (send dc draw-line 0 100 500 100)
+      (send dc draw-line 0 200 500 200)
+      (send dc draw-line 0 300 500 300)
+      (send dc draw-line 0 400 500 400)
+      (send dc draw-line 0 500 500 500)
+      (send dc draw-line 0 600 500 600)
+      (send dc draw-line 0 700 500 700)
+      (send dc set-font (make-font #:size 20))
+      (send dc draw-text "1" 40 725)
+      (send dc draw-text "2" 140 725)
+      (send dc draw-text "3" 240 725)
+      (send dc draw-text "4" 340 725)
+      (send dc draw-text "5" 440 725))))
+
+(define grid (mk-grid-bitmap grid-bitmap))
