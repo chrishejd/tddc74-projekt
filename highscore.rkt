@@ -70,6 +70,6 @@
 (define classic-highscore
   (new highscore%
        [high-lst '()]
-       [path "/home/christoffer/code/highscore-classic.txt"]))
+       [path "/home/christoffer/code/highscore-classic.txt"])) ;;Change to your directory
 
 (send classic-highscore load-highscore)
