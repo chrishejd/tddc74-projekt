@@ -1,5 +1,5 @@
 #lang racket/gui
-
+(require "highscore.rkt")
 (provide mk-grid-bitmap)
 (provide grid)
 (provide grid-bitmap)
@@ -30,6 +30,18 @@
       (send dc draw-text "2" 140 725)
       (send dc draw-text "3" 240 725)
       (send dc draw-text "4" 340 725)
-      (send dc draw-text "5" 440 725))))
+      (send dc draw-text "5" 440 725)
+      ;;Print the highscore
+      (send dc draw-text "Highscore" 550 300)
+      (send dc draw-text (send classic-highscore rank->string 1) 550 330)
+      (send dc draw-text (send classic-highscore rank->string 2) 550 360)
+      (send dc draw-text (send classic-highscore rank->string 3) 550 390)
+      (send dc draw-text (send classic-highscore rank->string 4) 550 420)
+      (send dc draw-text (send classic-highscore rank->string 5) 550 450)
+      (send dc draw-text (send classic-highscore rank->string 6) 550 480)
+      (send dc draw-text (send classic-highscore rank->string 7) 550 510)
+      (send dc draw-text (send classic-highscore rank->string 8) 550 540)
+      (send dc draw-text (send classic-highscore rank->string 9) 550 570)
+      (send dc draw-text (send classic-highscore rank->string 10) 550 600))))
 
 (define grid (mk-grid-bitmap grid-bitmap))
