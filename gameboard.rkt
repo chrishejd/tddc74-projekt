@@ -2,8 +2,10 @@
 (require "brick.rkt")
 (require "game-window-class.rkt")
 (require "game-grid.rkt")
+(require "highscore.rkt")
 
 (define screen-length 800)
+(define curr-score 0)
 ;;----------main gameboard----------
 
 (define (render-game canvas dc)
@@ -26,7 +28,11 @@
           (change-brick-pos (cdr lst)))))
   (begin
     (send dc draw-bitmap grid-bitmap 0 0)
-    (change-brick-pos brick-lst)))
+    (change-brick-pos brick-lst)
+    (send dc set-font (make-font #:size 20))
+    (send dc draw-text 
+            (string-append "Current score: " (number->string curr-score))
+          550 50)))
 
 ;;Returns the brick at the bottom of the screen
 (define (get-current lst)
@@ -37,15 +43,19 @@
 
 ;;Cancels gameplay
 (define (wrong-key code)
-  (void))
+  (send classic-highscore update-score! curr-score)
+  (send classic-highscore save-highscore)
+  (display (send classic-highscore get-highscore)))
 
 ;;Refreshes the canvas if the key for the bottom brick is pressed. otherwise cancels gameplay
 (define (handle-key-event key-event)
   (let ((key-code (send key-event get-key-code)))
     (cond
       ([eq? key-code 'release] (void))
-      ([eq? (char->integer key-code) (send (get-current brick-lst) get-key-code)] ;;-48??? (ASCII)
-        (send game-canvas refresh))
+      ([eq? (char->integer key-code) (send (get-current brick-lst) get-key-code)]
+        (begin
+          (set! curr-score (+ curr-score 1))
+          (send game-canvas refresh)))
       (else
         (wrong-key key-code)))))
        
