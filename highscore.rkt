@@ -1,26 +1,7 @@
 #lang racket
-
-;;----------Teststuff----------
-(define high-file "highscore.txt")
-(define high-lst (list (cons 1 10) (cons 2 5) (cons 3 2)))
-
-(define (write-high score)
-  (1))
-
-(define (update-highscore score)
-  (1))
-
-(define out (open-output-file "/home/christoffer/code/highscore.txt" 
-                              #:exists 'replace))
-(write high-lst out)
-
-(close-output-port out)
-
-(define in (open-input-file "/home/christoffer/code/highscore.txt"))
-
-(define lst (read in))
-
-;;----------real stuff----------
+(provide highscore%)
+(provide classic-highscore)
+(define classic-score-path "/home/christoffer/code/highscore-classic.txt")
 
 (define highscore%
   (class object%
@@ -46,30 +27,39 @@
       (set! high-lst (read in))
       (close-input-port in))
     
-    
     ;;Updates the highscore, inserts the score on right place
-    (define/public (update-score score)
+    (define/public (update-score! score)
       (define (loop lst)
         (cond
           [(null? lst) '()]
           [(> score (cdr (car lst)))
            (cons (cons (caar lst) score) (cdr lst))]
           [else 
-           (set! high-lst (cons (car lst) (loop (cdr lst))))]))
+           (cons (car lst) (loop (cdr lst)))]))
       
-      (loop high-lst))
+      (set! high-lst (loop high-lst)))
     
+    ;;Saves the highscore to path
     (define/public (save-highscore)
-      (1))
+      (let ((out (open-output-file path #:exists 'truncate)))
+        (begin 
+          (write high-lst out)
+          (close-output-port out))))
+    
+    ;;Makes a string of the form "rank:    score"
+    (define/public (rank->string rank)
+      (string-append (string-append
+                      (number->string rank)
+                      ":    ")
+                     (number->string (send this get-score rank))))
     
     (super-new)))
 
-
-
+;;----------Highscore objects----------
 
 (define classic-highscore
   (new highscore%
        [high-lst '()]
-       [path "/home/christoffer/code/highscore-classic.txt"])) ;;Change to your directory
-
+       [path classic-score-path]))
+       
 (send classic-highscore load-highscore)
