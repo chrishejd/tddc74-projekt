@@ -1,7 +1,9 @@
 #lang racket/gui
 (provide game-canvas%)
 (provide main-game-window)
+(provide end-game-window)
 (provide wrong-key-window)
+(provide start-window)
 
 (define game-canvas%
   (class canvas%
@@ -30,15 +32,27 @@
 (define main-game-window
   (new game-frame%
        [width 800]
-       [height 799]
+       [height 800]
        [label "Don't touch the lava!"]
        [curr-score 0]))
 
 (define wrong-key-window
   (new frame%
        [width 500]
-       [height 299]
+       [height 300]
        [label "Don't touch the lava!"]))
+
+(define end-game-window
+  (new frame%
+       [width 500]
+       [height 300]
+       [label "Don't touch the lava!"]))
+
+(define start-window
+  (new frame%
+       [width 300]
+       [height 100]
+       [label "Let's play :)"]))
 
 
     
