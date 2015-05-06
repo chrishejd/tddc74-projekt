@@ -32,6 +32,8 @@
       (define (loop lst)
         (cond
           [(null? lst) '()]
+          [(and (null? (cdr lst)) (> score (cdr (car lst))))
+           (cons (cons (+ 1 (caar lst)) (cdr (car lst))) (cons (cons (caar lst) score) '()))]
           [(> score (cdr (car lst)))
            (cons (cons (+ 1 (caar lst)) (cdr (car lst))) (loop (cdr lst)))]
           [(<= score (cdr (car lst)))
