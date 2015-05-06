@@ -6,7 +6,7 @@
 (require "wrong-key.rkt")
 
 (define screen-length 800)
-;;----------main gameboard----------
+;;----------main gameboard----------(send main-game-window show #t)
 
 ;;Draws the bricks
 (define (render-game canvas dc)
@@ -33,14 +33,25 @@
     (change-brick-pos brick-lst)
     (send dc set-font (make-font #:size 20))
     (send dc draw-text 
-            (string-append "Current score: " (number->string (send main-game-window get-score)))
-          550 50)))
+          (string-append "Current score: " (number->string (send main-game-window get-score)))
+          550 50)
+    (send dc draw-text "Highscore" 550 300)
+    (send dc draw-text (send classic-highscore rank->string 1) 550 330)
+    (send dc draw-text (send classic-highscore rank->string 2) 550 360)
+    (send dc draw-text (send classic-highscore rank->string 3) 550 390)
+    (send dc draw-text (send classic-highscore rank->string 4) 550 420)
+    (send dc draw-text (send classic-highscore rank->string 5) 550 450)
+    (send dc draw-text (send classic-highscore rank->string 6) 550 480)
+    (send dc draw-text (send classic-highscore rank->string 7) 550 510)
+    (send dc draw-text (send classic-highscore rank->string 8) 550 540)
+    (send dc draw-text (send classic-highscore rank->string 9) 550 570)
+    (send dc draw-text (send classic-highscore rank->string 10) 550 600)))
 
 ;;Returns the brick at the bottom of the screen
 (define (get-current lst)
   (cond
     ([send (car lst) is-current?]
-      (car lst))
+     (car lst))
     (else (get-current (cdr lst)))))
 
 ;;Cancels gameplay
@@ -55,17 +66,17 @@
     (cond
       ([eq? key-code 'release] (void))
       ([eq? (char->integer key-code) (send (get-current brick-lst) get-key-code)]
-        (begin
-          (send main-game-window inc-score)
-          (send game-canvas refresh)))
+       (begin
+         (send main-game-window inc-score)
+         (send game-canvas refresh)))
       (else
-        (wrong-key key-code)))))
+       (wrong-key key-code)))))
 
 ;;Game canvas to draw the main game on
 (define game-canvas
   (new game-canvas%
-    [parent main-game-window]
-    [paint-callback render-game]
-    [keyboard-handler handle-key-event]))
+       [parent main-game-window]
+       [paint-callback render-game]
+       [keyboard-handler handle-key-event]))
 
-(send main-game-window show #t)
+
