@@ -1,7 +1,7 @@
 #lang racket
 (provide highscore%)
 (provide classic-highscore)
-(define classic-score-path "/home/christoffer/code/highscore-classic.txt")
+(define classic-score-path "/home/chrhe465/Desktop/highscore-classic.txt")
 
 (define highscore%
   (class object%
@@ -33,11 +33,15 @@
         (cond
           [(null? lst) '()]
           [(> score (cdr (car lst)))
-           (cons (cons (caar lst) score) (cdr lst))]
-          [else 
-           (cons (car lst) (loop (cdr lst)))]))
+           (cons (cons (+ 1 (caar lst)) (cdr (car lst))) (loop (cdr lst)))]
+          [(<= score (cdr (car lst)))
+           (cons (cons (+ 1 (caar lst)) score) lst)]
+          [else (error "Update-score no testcase.")]))
       
-      (set! high-lst (loop high-lst)))
+      (let ((new-high-lst (loop (reverse high-lst))))
+        (if (> (length new-high-lst) 10)
+            (set! high-lst (reverse (cdr new-high-lst)))
+            (set! high-lst (reverse new-high-lst)))))
     
     ;;Saves the highscore to path
     (define/public (save-highscore)
@@ -61,5 +65,3 @@
   (new highscore%
        [high-lst '()]
        [path classic-score-path]))
-       
-(send classic-highscore load-highscore)
