@@ -5,6 +5,7 @@
 (provide wrong-key-window)
 (provide start-window)
 
+;;a cnvas class with a keyboard handler
 (define game-canvas%
   (class canvas%
     (init-field [keyboard-handler display])
@@ -14,6 +15,7 @@
     
     (super-new)))
 
+;;frame for the game score is how many bricks have been clicked
 (define game-frame%
   (class frame%
     (init-field curr-score)
@@ -36,18 +38,21 @@
        [label "Don't touch the lava!"]
        [curr-score 0]))
 
+;;window to show if thewrong key is pressed
 (define wrong-key-window
   (new frame%
        [width 500]
        [height 300]
        [label "Don't touch the lava!"]))
 
+;;window to show if the time is up
 (define end-game-window
   (new frame%
        [width 500]
        [height 300]
        [label "Don't touch the lava!"]))
 
+;;window to show before the game starts
 (define start-window
   (new frame%
        [width 300]
