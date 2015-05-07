@@ -26,11 +26,15 @@
     
     (super-new)))
 
+;;countdown timer for use in-game
 (define timer
   (new countdown-timer%
     [time 100000000]   
     [notify-callback main-time-up]))
 
+;;----------window to show if the time is up----------
+
+;;draws the window for the time-up window
 (define (render-time-up canvas dc)
   (let ((score (send main-game-window get-score)))
     (send dc set-font (make-font #:size 20))
@@ -41,13 +45,13 @@
                          " blocks.")
           90 100)))
 
-;;----------
 
 (define success-canvas
   (new canvas%
        [parent end-game-window]
        [paint-callback render-time-up]))
 
+;;button to play again
 (define retry-button
   (new button%
        [parent end-game-window]
@@ -64,11 +68,12 @@
        [parent end-game-window]
        [label "Main menu"]))
 
-;;----------Start window----------
+;;----------Start canvas----------
 
 (define (render-start-window canvas dc)
   (send dc draw-text "Press any key and release to play..." 20 40))
 
+;;When a key is released, starts the game
 (define (key-handler-start key-obj)
   (let ((key (send key-obj get-key-code)))
     (if (eq? key 'release)
@@ -78,6 +83,7 @@
           (send timer start (send timer get-time) #t))
         (void))))
 
+;;shown before the games tarts
 (define start-canvas
   (new game-canvas%
        [parent start-window]
