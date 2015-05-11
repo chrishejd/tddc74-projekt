@@ -1,7 +1,7 @@
 #lang racket
 (provide highscore%)
 (provide classic-highscore)
-(define classic-score-path "/home/chrhe465/Desktop/highscore-classic.txt")
+(define classic-score-path "/home/chrhe465/Desktop/tddc74-projekt-master/highscore-classic.txt")
 
 (define highscore%
   (class object%
