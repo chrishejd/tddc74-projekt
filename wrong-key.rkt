@@ -25,6 +25,7 @@
   (send timer stop)
   (send main-game-window show #f)
   (send classic-highscore update-score! (send main-game-window get-score))
+  (send classic-highscore save-highscore)
   (send wrong-key-window show #t)
   (send wrong-key-window refresh))
 
@@ -42,4 +43,7 @@
 (define exit-button
   (new button%
        [parent wrong-key-window]
-       [label "Main menu"]))
+       [label "Main menu"]
+       [callback (lambda (button event)
+                   (send wrong-key-window show #f)
+                   (send menu-window show #t))]))
