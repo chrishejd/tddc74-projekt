@@ -4,6 +4,9 @@
 (provide end-game-window)
 (provide wrong-key-window)
 (provide start-window)
+(provide menu-window)
+(provide tutorial-window)
+(provide hyper-window)
 
 ;;a cnvas class with a keyboard handler
 (define game-canvas%
@@ -29,6 +32,13 @@
     (define/public (init-score)
       (set! curr-score 0))
     (super-new)))
+
+(define hyper-window
+  (new game-frame%
+       [width 400]
+       [height 800]
+       [label "Don't touch the lava!"]
+       [curr-score 0]))
 
 ;;Parent window for game-mode
 (define main-game-window
@@ -59,5 +69,16 @@
        [height 100]
        [label "Let's play :)"]))
 
+(define menu-window
+  (new frame%
+       [width 500]
+       [height 300]
+       [label "Main Menu"]))
 
-    
+(define tutorial-window
+  (new frame%
+       [width 600]
+       [height 500]
+       [label "Tutorial"]))
+
+
