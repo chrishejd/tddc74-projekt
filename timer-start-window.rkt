@@ -10,6 +10,7 @@
 (define (main-time-up)
   (send main-game-window show #f)
   (send classic-highscore update-score! (send main-game-window get-score))
+  (send classic-highscore save-highscore)
   (send end-game-window show #t)
   (send end-game-window refresh))
 
@@ -29,7 +30,7 @@
 ;;countdown timer for use in-game
 (define timer
   (new countdown-timer%
-    [time 100000000]   
+    [time 20000]   
     [notify-callback main-time-up]))
 
 ;;----------window to show if the time is up----------
@@ -63,10 +64,13 @@
                    (send main-game-window init-score)
                    (send start-window show #t))]))
 
-(define exit-button
+(define main-menu-button
   (new button%
        [parent end-game-window]
-       [label "Main menu"]))
+       [label "Main menu"]
+       [callback (lambda (button event)
+                   (send end-game-window show #f)
+                   (send menu-window show #t))]))
 
 ;;----------Start canvas----------
 
