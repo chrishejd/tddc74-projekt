@@ -6,6 +6,5 @@
 (require "highscore.rkt")
 (require "main-menu.rkt")
 
-(init-bricks)
 (send classic-highscore load-highscore)
 (send menu-window show #t)
