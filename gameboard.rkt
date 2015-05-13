@@ -1,89 +1,90 @@
 #lang racket/gui
-(provide game-canvas%)
-(provide main-game-window)
-(provide end-game-window)
-(provide wrong-key-window)
-(provide start-window)
-(provide menu-window)
-(provide tutorial-window)
-(provide hyper-window)
+(require "brick.rkt")
+(require "game-window-class.rkt")
+(require "game-grid.rkt")
+(require "highscore.rkt")
+(require "wrong-key.rkt")
+(provide render-game)
+(provide handle-key-event)
 
-;;a cnvas class with a keyboard handler
-(define game-canvas%
-  (class canvas%
-    (init-field [keyboard-handler display])
-    
-    (define/override (on-char key-event)
-      (keyboard-handler key-event))
-    
-    (super-new)))
+(define screen-length 800)
+;;----------main gameboard----------(send main-game-window show #t)
 
-;;frame for the game score is how many bricks have been clicked
-(define game-frame%
-  (class frame%
-    (init-field curr-score curr-game-mode)
-    
-    (define/public (get-score)
-      curr-score)
-    
-    (define/public (get-mode)
-      curr-game-mode)
-    
-    (define/public (inc-score)
-      (set! curr-score (+ 1 curr-score)))
-    
-    (define/public (init-score)
-      (set! curr-score 0))
-    (super-new)))
+;;Draws the bricks
+(define (render-game canvas dc)
+  ;;Moves the bricks one position down
+  (define (change-brick-pos lst)
+    (if (null? (cdr lst))
+        (begin
+          (send (car lst) offset-x-y-pos 0 100)
+          (send (car lst) set-key-code!)
+          (send (car lst) set-current)
+          (send dc set-brush (make-object brush% (send (car lst) get-color) 'solid))
+          (send dc draw-rectangle (send (car lst) get-x-pos) (send (car lst) get-y-pos)
+                (send (car lst) get-size) (send (car lst) get-size)))
+        (begin
+          (send (car lst) offset-x-y-pos 0 100)
+          (send (car lst) set-key-code!)
+          (send (car lst) set-current)
+          (send dc set-brush (make-object brush% (send (car lst) get-color) 'solid))
+          (send dc draw-rectangle (send (car lst) get-x-pos) (send (car lst) get-y-pos)
+                (send (car lst) get-size) (send (car lst) get-size))
+          (change-brick-pos (cdr lst)))))
+  (begin
+    (send dc draw-bitmap grid-bitmap 0 0)
+    (change-brick-pos brick-lst)
+    (send dc set-font (make-font #:size 20))
+    (send dc draw-text 
+          (string-append "Current score: " (number->string (send main-game-window get-score)))
+          550 50)
+    (send dc draw-text "Highscore" 550 300)
+    (send dc draw-text (send classic-highscore rank->string 1) 550 330)
+    (send dc draw-text (send classic-highscore rank->string 2) 550 360)
+    (send dc draw-text (send classic-highscore rank->string 3) 550 390)
+    (send dc draw-text (send classic-highscore rank->string 4) 550 420)
+    (send dc draw-text (send classic-highscore rank->string 5) 550 450)
+    (send dc draw-text (send classic-highscore rank->string 6) 550 480)
+    (send dc draw-text (send classic-highscore rank->string 7) 550 510)
+    (send dc draw-text (send classic-highscore rank->string 8) 550 540)
+    (send dc draw-text (send classic-highscore rank->string 9) 550 570)
+    (send dc draw-text (send classic-highscore rank->string 10) 550 600)))
 
-(define hyper-window
-  (new game-frame%
-       [width 600]
-       [height 800]
-       [label "Don't touch the lava!"]
-       [curr-score 0]
-       [curr-game-mode 'hyper]))
+;;Returns the brick at the bottom of the screen
+(define (get-current lst)
+  (cond
+    ([send (car lst) is-current?]
+     (car lst))
+    (else (get-current (cdr lst)))))
 
-;;Parent window for game-mode
-(define main-game-window
-  (new game-frame%
-       [width 800]
-       [height 800]
-       [label "Don't touch the lava!"]
-       [curr-score 0]
-       [curr-game-mode 'casual]))
+;;Cancels gameplay
+(define (wrong-key code)
+  (send classic-highscore update-score! (send main-game-window get-score))
+  (send classic-highscore save-highscore)
+  (main-wrong-key))
 
-;;window to show if thewrong key is pressed
-(define wrong-key-window
-  (new frame%
-       [width 500]
-       [height 300]
-       [label "Don't touch the lava!"]))
+;;Refreshes the canvas if the key for the bottom brick is pressed. otherwise cancels gameplay
+(define (handle-key-event key-event)
+  (let ((key-code (send key-event get-key-code)))
+    (cond
+      ([eq? key-code 'release] (void))
+      ([eq? (char->integer key-code) (send (get-current brick-lst) get-key-code)]
+       (begin
+         (send main-game-window inc-score)
+         (send game-canvas refresh)
+         (send hyper-canvas refresh)))
+      (else
+       (wrong-key key-code)))))
 
-;;window to show if the time is up
-(define end-game-window
-  (new frame%
-       [width 500]
-       [height 300]
-       [label "Don't touch the lava!"]))
+;;Game canvas to draw the main game on
+(define game-canvas
+  (new game-canvas%
+       [parent main-game-window]
+       [paint-callback render-game]
+       [keyboard-handler handle-key-event]))
 
-;;window to show before the game starts
-(define start-window
-  (new frame%
-       [width 300]
-       [height 100]
-       [label "Let's play :)"]))
-
-(define menu-window
-  (new frame%
-       [width 500]
-       [height 300]
-       [label "Main Menu"]))
-
-(define tutorial-window
-  (new frame%
-       [width 600]
-       [height 500]
-       [label "Tutorial"]))
-
+(define hyper-canvas
+  (new game-canvas%
+       [parent hyper-window]
+       [paint-callback render-game]
+       [keyboard-handler handle-key-event]))
 
