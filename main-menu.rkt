@@ -1,5 +1,7 @@
 #lang racket/gui
 (require "game-window-class.rkt")
+(require "brick.rkt")
+(require "game-grid.rkt")
 
 ;;Canvas callback
 (define (render-start-menu canvas dc)
@@ -23,12 +25,27 @@
 (define start-button
   (new button%
        [parent menu-window]
-       [label "Play Game!!!"]
-       [callback (lambda (button event) 
+       [label "casual..."]
+       [callback (lambda (button event)
+                   (set-column-size 5)
+                   (choose-bitmap 5)
                    (send menu-window show #f)
                    (send main-game-window show #t)
                    (send main-game-window refresh)
                    (send main-game-window init-score)
+                   (send start-window show #t))]))
+
+(define mode-button
+  (new button%
+       [parent menu-window]
+       [label "HYPER!!!"]
+       [callback (lambda (button event) 
+                   (set-column-size 3)
+                   (choose-bitmap 3)
+                   (send menu-window show #f)
+                   (send hyper-window show #t)
+                   (send hyper-window refresh)
+                   (send hyper-window init-score)
                    (send start-window show #t))]))
 
 (define tutorial-button
