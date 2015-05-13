@@ -2,7 +2,7 @@
 (provide brick%)
 (provide brick-lst)
 (provide top-brick-coord)
-(provide init-bricks)
+(provide set-column-size)
 
 (define top-brick-coord 0)
 (define std-size 100)
@@ -10,11 +10,14 @@
 
 (define brick%
   (class object%
-    (init-field x-pos y-pos size color key-code current?)
+    (init-field x-pos y-pos size color key-code current? columns)
     
     ;;Sets new x position
     (define/public (set-x-pos! new-pos)
       (set! x-pos new-pos))
+    
+    (define/public (get-x-pos)
+      x-pos)
     
     ;;Sets new y position
     (define/public (set-y-pos! new-pos)
@@ -25,14 +28,14 @@
     (define/public (offset-x-y-pos x-offset y-offset)
       (if (send this is-current?)
           (begin
-            (set! x-pos (* 100 (+ (random 5) 0)))
+            (set! x-pos (* 100 (+ (random columns) 0)))
             (set! y-pos top-brick-coord))
           (begin
             (set! x-pos (+ x-pos x-offset))
             (set! y-pos (+ y-pos y-offset)))))
     
     (define/public (set-rnd-x-pos)
-      (set! x-pos (* 100 (+ (random 5) 0))))
+      (set! x-pos (* 100 (+ (random columns) 0))))
     
     ;;Changes the color
     ;;(define/public (set-color! new-color)
@@ -48,10 +51,6 @@
     
     (define/public (get-size)
       size)
-    
-    ;;Returns the x position
-    (define/public (get-x-pos)
-      x-pos)
     
     ;;Returns the y position
     (define/public (get-y-pos)
@@ -79,7 +78,7 @@
     (super-new)))
 
 ;;Creates a list of brick objects
-(define (make-brick-lst size num-of-bricks)
+(define (make-brick-lst size num-of-bricks x-columns)
   (define (loop x y counter)
     (if (= 0 counter)
         '()
@@ -90,11 +89,12 @@
                      [size std-size]
                      [color "black"]
                      [key-code (+ (/ x 100) 49)]
-                     [current? #f])
-                (loop (+ x 100) (+ y 100) (- counter 1))))))
+                     [current? #f]
+                     [columns x-columns])
+                (loop 100 (+ y 100) (- counter 1))))))
   (loop 0 0 num-of-bricks))
 
-(define brick-lst (make-brick-lst std-size std-num-bricks))
+(define brick-lst '())
 
 ;;Too randomize the positions of the bricks
 (define (init-bricks)
@@ -104,3 +104,9 @@
      (send brick-obj set-key-code!)
      (send brick-obj set-current)) 
    brick-lst))
+
+(define (set-column-size size)
+  (begin
+    (set! brick-lst (make-brick-lst std-size std-num-bricks size))
+    (printf "~a" brick-lst)
+    (init-bricks)))
