@@ -21,10 +21,13 @@
 ;;frame for the game score is how many bricks have been clicked
 (define game-frame%
   (class frame%
-    (init-field curr-score)
+    (init-field curr-score curr-game-mode)
     
     (define/public (get-score)
       curr-score)
+    
+    (define/public (get-mode)
+      curr-game-mode)
     
     (define/public (inc-score)
       (set! curr-score (+ 1 curr-score)))
@@ -35,10 +38,11 @@
 
 (define hyper-window
   (new game-frame%
-       [width 400]
+       [width 600]
        [height 800]
        [label "Don't touch the lava!"]
-       [curr-score 0]))
+       [curr-score 0]
+       [curr-game-mode 'hyper]))
 
 ;;Parent window for game-mode
 (define main-game-window
@@ -46,7 +50,8 @@
        [width 800]
        [height 800]
        [label "Don't touch the lava!"]
-       [curr-score 0]))
+       [curr-score 0]
+       [curr-game-mode 'casual]))
 
 ;;window to show if thewrong key is pressed
 (define wrong-key-window
