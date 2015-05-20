@@ -1,7 +1,13 @@
 #lang racket
 (provide highscore%)
 (provide classic-highscore)
-(define classic-score-path "/home/chrhe465/Desktop/tddc74-projekt-master/highscore-classic.txt")
+(provide hyper-highscore)
+(provide highscore)
+(provide load-highscore)
+
+(define classic-score-path "/home/jongu926/Desktop/tddc74-projekt-master/highscore-classic.txt")
+(define hyper-score-path "/home/jongu926/Desktop/tddc74-projekt-master/highscore-hyper.txt")
+(define highscore (void))
 
 (define highscore%
   (class object%
@@ -67,3 +73,18 @@
   (new highscore%
        [high-lst '()]
        [path classic-score-path]))
+
+(define hyper-highscore
+  (new highscore%
+       [high-lst '()]
+       [path hyper-score-path]))
+
+(send classic-highscore load-highscore)
+(send hyper-highscore load-highscore)
+
+(define (load-highscore game-mode)
+  (cond
+    [(eq? game-mode 'hyper)
+     (set! highscore hyper-highscore)]
+    [(eq? game-mode 'classic)
+     (set! highscore classic-highscore)]))
