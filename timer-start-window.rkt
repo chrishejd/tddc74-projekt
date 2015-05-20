@@ -8,9 +8,9 @@
 
 ;;Window handling function for timer
 (define (main-time-up)
-  (send main-game-window show #f)
-  (send classic-highscore update-score! (send main-game-window get-score))
-  (send classic-highscore save-highscore)
+  (send curr-win show #f)
+  (send highscore update-score! (send curr-win get-score))
+  (send highscore save-highscore)
   (send end-game-window show #t)
   (send end-game-window refresh))
 
@@ -37,7 +37,7 @@
 
 ;;draws the window for the time-up window
 (define (render-time-up canvas dc)
-  (let ((score (send main-game-window get-score)))
+  (let ((score (send curr-win get-score)))
     (send dc set-font (make-font #:size 20))
     (send dc draw-text "Time is up!" 200 50)
     (send dc draw-text 
@@ -58,10 +58,10 @@
        [parent end-game-window]
        [label "Play again"]
        [callback (lambda (button event) 
+                   (send curr-win init-score)
                    (send end-game-window show #f)
-                   (send main-game-window show #t)
-                   (send main-game-window refresh)
-                   (send main-game-window init-score)
+                   (send curr-win show #t)
+                   (send curr-win refresh)
                    (send start-window show #t))]))
 
 (define main-menu-button
@@ -75,7 +75,7 @@
 ;;----------Start canvas----------
 
 (define (render-start-window canvas dc)
-  (send dc draw-text "Press any key and release to play..." 20 40))
+  (send dc draw-text "Press any key and release to play..." 10 40))
 
 ;;When a key is released, starts the game
 (define (key-handler-start key-obj)
