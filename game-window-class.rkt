@@ -7,6 +7,13 @@
 (provide menu-window)
 (provide tutorial-window)
 (provide hyper-window)
+(provide curr-win)
+(provide set-curr-win)
+(provide tutorial-window)
+(provide credits-window)
+
+;;Holder for the current canvas
+(define curr-win (void))
 
 ;;a cnvas class with a keyboard handler
 (define game-canvas%
@@ -21,13 +28,10 @@
 ;;frame for the game score is how many bricks have been clicked
 (define game-frame%
   (class frame%
-    (init-field curr-score curr-game-mode)
-    
+    (init-field curr-score)
+        
     (define/public (get-score)
       curr-score)
-    
-    (define/public (get-mode)
-      curr-game-mode)
     
     (define/public (inc-score)
       (set! curr-score (+ 1 curr-score)))
@@ -41,8 +45,7 @@
        [width 600]
        [height 800]
        [label "Don't touch the lava!"]
-       [curr-score 0]
-       [curr-game-mode 'hyper]))
+       [curr-score 0]))
 
 ;;Parent window for game-mode
 (define main-game-window
@@ -50,8 +53,7 @@
        [width 800]
        [height 800]
        [label "Don't touch the lava!"]
-       [curr-score 0]
-       [curr-game-mode 'casual]))
+       [curr-score 0]))
 
 ;;window to show if thewrong key is pressed
 (define wrong-key-window
@@ -85,5 +87,20 @@
        [width 600]
        [height 500]
        [label "Tutorial"]))
+
+(define credits-window
+  (new frame%
+       [width 600]
+       [height 400]
+       [label "In the making of \"Don't touch the lava\""]))
+
+ ;;Sets the curr-win to the specified game-mode
+  (define (set-curr-win game-mode)
+    (cond
+      [(eq? game-mode 'casual)
+       (set! curr-win main-game-window)]
+      [(eq? game-mode 'hyper)
+       (set! curr-win hyper-window)]
+      [else (error "No valid game-mode in set-curr-canv." game-mode)]))
 
 
