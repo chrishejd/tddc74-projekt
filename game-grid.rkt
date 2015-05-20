@@ -31,7 +31,7 @@
       (send dc set-brush (make-object brush% "red" 'solid))
       (send dc draw-rectangle 0 0 vert-size 700)
       ;;Horizontal lines
-      (send dc draw-line 0 0 500 0)
+      (send dc draw-line 0 0 vert-size 0)
       (send dc draw-line 0 100 vert-size 100)
       (send dc draw-line 0 200 vert-size 200)
       (send dc draw-line 0 300 vert-size 300)
@@ -43,5 +43,6 @@
       (vert-lines-text vert-size))))
 
 (define (choose-bitmap col)
+  (set! grid-bitmap (make-bitmap 800 1600))
   (set! grid (mk-grid col))
   (set! grid-edge (* 100 col)))
