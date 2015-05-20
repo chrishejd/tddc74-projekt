@@ -5,7 +5,7 @@
 (provide main-wrong-key)
 
 (define (render-wrong-key canvas dc)
-  (let ((score (send main-game-window get-score)))
+  (let ((score (send curr-win get-score)))
     (send dc set-font (make-font #:size 20))
     (send dc draw-text "You died!" 200 50)
     (send dc draw-text 
@@ -21,11 +21,12 @@
        [paint-callback render-wrong-key]))
 
 ;;Main function for pressing the wrong key
-(define (main-wrong-key)
+(define (main-wrong-key score)
   (send timer stop)
   (send main-game-window show #f)
-  (send classic-highscore update-score! (send main-game-window get-score))
-  (send classic-highscore save-highscore)
+  (send hyper-window show #f)
+  (send highscore update-score! score)
+  (send highscore save-highscore)
   (send wrong-key-window show #t)
   (send wrong-key-window refresh))
 
@@ -33,11 +34,11 @@
   (new button%
        [parent wrong-key-window]
        [label "Play again"]
-       [callback (lambda (button event) 
+       [callback (lambda (button event)
+                   (send curr-win init-score)
                    (send wrong-key-window show #f)
-                   (send main-game-window show #t)
-                   (send main-game-window refresh)
-                   (send main-game-window init-score)
+                   (send curr-win show #t)
+                   (send curr-win refresh)
                    (send start-window show #t))]))
 
 (define exit-button
