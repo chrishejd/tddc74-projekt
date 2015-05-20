@@ -4,10 +4,13 @@
 (provide top-brick-coord)
 (provide set-column-size)
 
+
 (define top-brick-coord 0)
 (define std-size 100)
 (define std-num-bricks 7)
 
+
+;;Brick objects and their procedures
 (define brick%
   (class object%
     (init-field x-pos y-pos size color key-code current? columns)
@@ -52,24 +55,25 @@
     (define/public (get-size)
       size)
     
-    ;;Returns the y position
     (define/public (get-y-pos)
-      y-pos)
-    
-    
-    ;;Returns the color
+      y-pos)    
+
     (define/public (get-color)
       color)
     
+    ;;Returns the brick's keycode
     (define/public (get-key-code)
       key-code)
     
+    ;;Returns #t if the brick is the most bottom brick
     (define/public (is-current?)
       current?)
-    
+
+    ;;Sets the brick's key code depending on the x-position
     (define/public (set-key-code!)
       (set! key-code (+ (/ x-pos 100) 49)))
     
+    ;;If the brick is the most bottom brick "current?" is set to #t
     (define/public (set-current)
       (if (= y-pos (+ 600 top-brick-coord))
           (set! current? #t)
@@ -78,6 +82,7 @@
     (super-new)))
 
 ;;Creates a list of brick objects
+;;Needed arguments: brick size, number of bricks, and number of columns
 (define (make-brick-lst size num-of-bricks x-columns)
   (define (loop x y counter)
     (if (= 0 counter)
@@ -97,6 +102,7 @@
 (define brick-lst '())
 
 ;;Too randomize the positions of the bricks
+;;Argument: list of bricks
 (define (init-bricks)
   (for-each 
    (lambda (brick-obj)
@@ -108,5 +114,4 @@
 (define (set-column-size size)
   (begin
     (set! brick-lst (make-brick-lst std-size std-num-bricks size))
-    (printf "~a" brick-lst)
     (init-bricks)))
