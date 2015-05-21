@@ -1,16 +1,22 @@
 #lang racket/gui
+
+;;Purpose: Create a list of brick objects which will be drawn on the game canvas 
+;;Authors: Christoffer Hejdström (chrhe465) and Jonatan Gustafsson (jongu926)
+;;Last change: Added procedure "set-column-size", 2015-05-21
+
+
 (provide brick%)
 (provide brick-lst)
 (provide top-brick-coord)
 (provide set-column-size)
-
 
 (define top-brick-coord 0)
 (define std-size 100)
 (define std-num-bricks 7)
 
 
-;;Brick objects and their procedures
+;;----------Brick Object----------
+
 (define brick%
   (class object%
     (init-field x-pos y-pos size color key-code current? columns)
@@ -81,6 +87,8 @@
     
     (super-new)))
 
+;;----------Brick List----------
+
 ;;Creates a list of brick objects
 ;;Needed arguments: brick size, number of bricks, and number of columns
 (define (make-brick-lst size num-of-bricks x-columns)
@@ -100,6 +108,8 @@
   (loop 0 0 num-of-bricks))
 
 (define brick-lst '())
+
+;;----------Initial Randomizer----------
 
 ;;Too randomize the positions of the bricks
 ;;Argument: list of bricks
