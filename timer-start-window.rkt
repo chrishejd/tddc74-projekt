@@ -1,10 +1,17 @@
 #lang racket/gui
+
+;;Purpose: Provides a 20 second timer, the 'time-is-up-window', and
+;;the 'start-timer-canvas'
+;;Authors: Christoffer Hejdström (chrhe465) and Jonatan Gustafsson (jongu926)
+;;Last change: Updated with new modular highscore and game modes, 2015-05-20
+
 (require "game-window-class.rkt")
 (require "highscore.rkt")
+
 (provide timer)
 (provide main-time-up)
 
-;;----------
+;;----------Timer Notify Callback----------
 
 ;;Window handling function for timer
 (define (main-time-up)
@@ -14,7 +21,7 @@
   (send end-game-window show #t)
   (send end-game-window refresh))
 
-;;Timer class
+;;----------Timer Object----------
 (define countdown-timer%
   (class timer%
     [init-field time]
@@ -27,15 +34,15 @@
     
     (super-new)))
 
-;;countdown timer for use in-game
+;;Countdown timer for use in-game, 20 seconds
 (define timer
   (new countdown-timer%
     [time 20000]   
     [notify-callback main-time-up]))
 
-;;----------window to show if the time is up----------
+;;----------Time-is-up-canvas----------
 
-;;draws the window for the time-up window
+;;Draws the window for the time-up window
 (define (render-time-up canvas dc)
   (let ((score (send curr-win get-score)))
     (send dc set-font (make-font #:size 20))
@@ -46,13 +53,14 @@
                          " blocks.")
           90 100)))
 
-
 (define success-canvas
   (new canvas%
        [parent end-game-window]
        [paint-callback render-time-up]))
 
-;;button to play again
+;;----------Buttons For Timer Window----------
+
+;;Restarts the game with the same mode
 (define retry-button
   (new button%
        [parent end-game-window]
@@ -64,6 +72,7 @@
                    (send curr-win refresh)
                    (send start-window show #t))]))
 
+;;Back to main menu
 (define main-menu-button
   (new button%
        [parent end-game-window]
@@ -72,7 +81,7 @@
                    (send end-game-window show #f)
                    (send menu-window show #t))]))
 
-;;----------Start canvas----------
+;;----------Start-Timer-Canvas----------
 
 (define (render-start-window canvas dc)
   (send dc draw-text "Press any key and release to play..." 10 40))
@@ -87,7 +96,7 @@
           (send timer start (send timer get-time) #t))
         (void))))
 
-;;shown before the games tarts
+;;Canvas shown before the game starts
 (define start-canvas
   (new game-canvas%
        [parent start-window]
