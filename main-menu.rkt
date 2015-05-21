@@ -1,4 +1,9 @@
 #lang racket/gui
+
+;;Purpose: Contains the options of main menu
+;;Authors: Christoffer Hejdström (chrhe465) and Jonatan Gustafsson (jongu926)
+;;Last change: Updated render-tutorial, 2015-05-21
+
 (require "game-window-class.rkt")
 (require "brick.rkt")
 (require "game-grid.rkt")
@@ -46,6 +51,7 @@
 
 ;;----------Main Menu Buttons----------
 
+;;Starts "casual..." mode
 (define casual-button
   (new button%
        [parent menu-window]
@@ -61,6 +67,7 @@
                    (send main-game-window refresh)
                    (send start-window show #t))]))
 
+;;Starts "HYPER!!!" mode
 (define hyper-button
   (new button%
        [parent menu-window]
@@ -90,7 +97,7 @@
        [callback (lambda (button event)
                    (send credits-window show #t))]))
 
-;;----------Close Buttons----------
+;;----------Close Window Buttons----------
 
 (define close-tutorial-button
   (new button%
