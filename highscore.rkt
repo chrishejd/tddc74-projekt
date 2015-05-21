@@ -8,9 +8,10 @@
 ;;(define classic-score-path "/home/christoffer/code/tddc74-projekt-master/highscore-classic.txt")
 ;;(define hyper-score-path "/home/christoffer/code/tddc74-projekt-master/highscore-hyper.txt")
 (define highscore (void))
-(define classic-score-path (string-append (path->string (current-directory)) "highscore-classic.txt"))
-(define hyper-score-path (string-append (path->string (current-directory)) "highscore-hyper.txt"))
-(define highscore (void))
+(define classic-score-path (string->path 
+                            (string-append (path->string (current-directory)) "highscore-classic.txt")))
+(define hyper-score-path (string->path 
+                          (string-append (path->string (current-directory)) "highscore-hyper.txt")))
 
 (define highscore%
   (class object%
