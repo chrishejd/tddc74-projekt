@@ -1,5 +1,9 @@
 #lang racket/gui
-(require "highscore.rkt")
+
+;;Purpose: Bitmap for the game grid, which will improve the game's effectiveness 
+;;Authors: Christoffer Hejdström (chrhe465)
+;;Last change: The drawn bitmap now depends on the number of columns, 2015-05-18
+
 (provide grid)
 (provide grid-bitmap)
 (provide choose-bitmap)
@@ -8,6 +12,8 @@
 (define grid-edge (void))
 (define grid (void))
 (define grid-bitmap (make-bitmap 800 1600))
+
+;;----------Drawing Background Grid----------
 
 ;;Draws a grid of width size
 (define (mk-grid size)
@@ -42,6 +48,7 @@
       ;;Vertical lines
       (vert-lines-text vert-size))))
 
+;;Function for the number of columns the bitmap should contain
 (define (choose-bitmap col)
   (set! grid-bitmap (make-bitmap 800 1600))
   (set! grid (mk-grid col))
