@@ -1,19 +1,25 @@
 #lang racket/gui
+
+;;Purpose: Graphics for the gameboard, which the game is played on 
+;;Authors: Christoffer Hejdström (chrhe465) and Jonatan Gustafsson (jongu926)
+;;Last change: Made "render-game" more modular, 2015-05-21
+
 (require "brick.rkt")
 (require "game-window-class.rkt")
 (require "game-grid.rkt")
 (require "highscore.rkt")
 (require "wrong-key.rkt")
+
 (provide render-game)
 (provide handle-key-event)
+
 (define screen-length 800)
 
-
-;;----------main gameboard----------
+;;----------Main Paint Callback----------
 
 ;;Draws the bricks, the grid and the highscore
 (define (render-game canvas dc)
-  ;;Moves the bricks one position down
+  ;;Moves the bricks one position down, which is (+ 100 y-pos)
   (define (change-brick-pos lst)
     (if (null? (cdr lst))
         (begin
@@ -57,12 +63,14 @@
       ([send (car lst) is-current?]
        (car lst))
       (else (get-current (cdr lst)))))
-  
+
+;;----------Keyboard functions----------
+
   ;;Cancels gameplay if wrong key code
   (define (wrong-key code)
     (main-wrong-key (send curr-win get-score)))
-  
-  ;;Refreshes the canvas if the key for the bottom brick is pressed. otherwise cancels gameplay
+
+  ;;Refreshes the canvas if the key for the bottom brick is pressed, otherwise cancels gameplay
   (define (handle-key-event key-event)
     (let ((key-code (send key-event get-key-code)))
       (cond
@@ -76,15 +84,17 @@
              (wrong-key key-code)))
         (else
          (error "Pressed key not valid key-event:" key-code)))))
-  
-  ;;Game canvas to draw the main game on
+
+;;----------Canvases----------
+
+  ;;Game canvas for the casual game mode
   (define game-canvas
     (new game-canvas%
          [parent main-game-window]
          [paint-callback render-game]
          [keyboard-handler handle-key-event]))
   
-  ;;Game canvas for hyper mode
+  ;;Game canvas for the hyper game mode
   (define hyper-canvas
     (new game-canvas%
          [parent hyper-window]
