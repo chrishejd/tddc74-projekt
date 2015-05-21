@@ -1,17 +1,25 @@
 #lang racket
+
+;;Purpose: Keeps track of the highscore for each game mode 
+;;Authors: Christoffer Hejdström (chrhe465)
+;;Last change: Added "hyper-highscore", and made
+;;"highscore.rkt" more modular, 2015-05-20
+
 (provide highscore%)
 (provide classic-highscore)
 (provide hyper-highscore)
 (provide highscore)
 (provide load-highscore)
 
-;;(define classic-score-path "/home/christoffer/code/tddc74-projekt-master/highscore-classic.txt")
-;;(define hyper-score-path "/home/christoffer/code/tddc74-projekt-master/highscore-hyper.txt")
 (define highscore (void))
-(define classic-score-path (string->path 
-                            (string-append (path->string (current-directory)) "highscore-classic.txt")))
-(define hyper-score-path (string->path 
-                          (string-append (path->string (current-directory)) "highscore-hyper.txt")))
+(define classic-score-path 
+  (string->path (string-append (path->string (current-directory)) 
+                               "highscore-classic.txt")))
+(define hyper-score-path 
+  (string->path (string-append (path->string (current-directory)) 
+                               "highscore-hyper.txt")))
+
+;;----------Highscore Object----------
 
 (define highscore%
   (class object%
@@ -31,7 +39,7 @@
           [else (loop (cdr lst))]))
       (loop high-lst))
     
-    ;;loads the highscore
+    ;;Loads the highscore from file
     (define/public (load-highscore)
       (define in (open-input-file path))
       (set! high-lst (read in))
@@ -71,20 +79,19 @@
     
     (super-new)))
 
-;;----------Highscore objects----------
+;;----------Highscore Objects----------
 
+;;Highscore for casual...
 (define classic-highscore
   (new highscore%
        [high-lst '()]
        [path classic-score-path]))
 
+;;Highscore for HYPER!!!
 (define hyper-highscore
   (new highscore%
        [high-lst '()]
        [path hyper-score-path]))
-
-(send classic-highscore load-highscore)
-(send hyper-highscore load-highscore)
 
 (define (load-highscore game-mode)
   (cond
@@ -92,3 +99,8 @@
      (set! highscore hyper-highscore)]
     [(eq? game-mode 'classic)
      (set! highscore classic-highscore)]))
+
+;;----------Loads Highscore For Both Modes----------
+
+(send classic-highscore load-highscore)
+(send hyper-highscore load-highscore)
