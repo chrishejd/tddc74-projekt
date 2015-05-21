@@ -5,8 +5,11 @@
 (provide highscore)
 (provide load-highscore)
 
-(define classic-score-path "/home/jongu926/Desktop/tddc74-projekt-master/highscore-classic.txt")
-(define hyper-score-path "/home/jongu926/Desktop/tddc74-projekt-master/highscore-hyper.txt")
+;;(define classic-score-path "/home/christoffer/code/tddc74-projekt-master/highscore-classic.txt")
+;;(define hyper-score-path "/home/christoffer/code/tddc74-projekt-master/highscore-hyper.txt")
+(define highscore (void))
+(define classic-score-path (string-append (path->string (current-directory)) "highscore-classic.txt"))
+(define hyper-score-path (string-append (path->string (current-directory)) "highscore-hyper.txt"))
 (define highscore (void))
 
 (define highscore%
