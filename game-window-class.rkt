@@ -1,4 +1,9 @@
 #lang racket/gui
+
+;;Purpose: Create all the needed frames 
+;;Authors: Christoffer Hejdström (chrhe465) and Jonatan Gustafsson (jongu926)
+;;Last change: Implemented frames for tutorial and credits, 2015-05-20
+
 (provide game-canvas%)
 (provide main-game-window)
 (provide end-game-window)
@@ -12,10 +17,12 @@
 (provide tutorial-window)
 (provide credits-window)
 
-;;Holder for the current canvas
+;;Holder for the current window
 (define curr-win (void))
 
-;;a cnvas class with a keyboard handler
+;;----------Gameboard Canvas Object----------
+
+;;Canvas class with keyboard handler
 (define game-canvas%
   (class canvas%
     (init-field [keyboard-handler display])
@@ -25,7 +32,9 @@
     
     (super-new)))
 
-;;frame for the game score is how many bricks have been clicked
+;;----------Game Frame Object For Score Counting----------
+
+;;Frame for the game score is how many bricks have been clicked
 (define game-frame%
   (class frame%
     (init-field curr-score)
@@ -38,7 +47,10 @@
     
     (define/public (init-score)
       (set! curr-score 0))
+    
     (super-new)))
+
+;;----------Game Frames----------
 
 (define hyper-window
   (new game-frame%
@@ -55,44 +67,51 @@
        [label "Don't touch the lava!"]
        [curr-score 0]))
 
-;;window to show if thewrong key is pressed
+;;----------Normal Frames----------
+
+;;Window for wrong key pressed
 (define wrong-key-window
   (new frame%
        [width 500]
        [height 300]
        [label "Don't touch the lava!"]))
 
-;;window to show if the time is up
+;;Window for when time is up
 (define end-game-window
   (new frame%
        [width 500]
        [height 300]
        [label "Don't touch the lava!"]))
 
-;;window to show before the game starts
+;;Window to show before the game starts
 (define start-window
   (new frame%
        [width 300]
        [height 100]
        [label "Let's play :)"]))
 
+;;Menu Window
 (define menu-window
   (new frame%
        [width 500]
        [height 300]
        [label "Main Menu"]))
 
+;;Window for tutorial
 (define tutorial-window
   (new frame%
        [width 600]
        [height 500]
        [label "Tutorial"]))
 
+;;Window for credits
 (define credits-window
   (new frame%
        [width 600]
        [height 400]
        [label "In the making of \"Don't touch the lava\""]))
+
+;;----------Helpfunction to Separate the Game Modes from Eachother----------
 
  ;;Sets the curr-win to the specified game-mode
   (define (set-curr-win game-mode)
